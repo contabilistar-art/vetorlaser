@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>VetorLaser PRO — Sua ferramenta de vetorização</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/imagetracerjs/1.2.6/imagetracer_v1.2.6.min.js"></script>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--line:#232a34;--ink:#e6edf3;--muted:#9aa7b4;--brand:#ff5b39;--brand2:#ffb020;--ok:#3fb950}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  header{border-bottom:1px solid var(--line);background:#0b0f14}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+  .logo{font-weight:800;font-size:20px}.logo span{color:var(--brand)}
+  .badge{font-size:12px;color:#241a00;background:var(--brand2);padding:4px 10px;border-radius:20px;font-weight:700}
+  .hero{text-align:center;padding:40px 0 20px}
+  .hero h1{font-size:32px;margin:0 0 10px}.hero h1 b{color:var(--brand2)}
+  .hero p{color:var(--muted);margin:0}
+  .tool{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin:18px 0 30px}
+  .drop{border:2px dashed #2c3542;border-radius:12px;padding:30px;text-align:center;cursor:pointer;transition:.15s;background:#10151c}
+  .drop:hover{border-color:var(--brand);background:#12181f}.drop b{color:var(--brand)}
+  .drop small{display:block;color:var(--muted);margin-top:6px}
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+  select{background:#10151c;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit}
+  .btn{background:var(--brand);color:#fff;border:0;border-radius:9px;padding:11px 20px;font-weight:700;cursor:pointer;font:inherit}
+  .btn:disabled{opacity:.4;cursor:not-allowed}.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .status{font-size:13px;color:var(--muted);margin-top:10px;min-height:18px}
+  .items{margin-top:18px;display:grid;gap:12px}
+  .item{display:grid;grid-template-columns:80px 80px 1fr auto;gap:12px;align-items:center;background:#10151c;border:1px solid var(--line);border-radius:10px;padding:10px}
+  .item img,.item svg{max-width:76px;max-height:76px}
+  .item .name{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><div class="logo">Vetor<span>Laser</span> <span class="badge">PRO</span></div>
+  <div style="color:var(--ok);font-size:13px">✓ Acesso liberado — sem marca d'água</div></div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Bem-vindo ao <b>Pro</b> 🎉</h1>
+    <p>Salve este link nos favoritos. Vetorize quantas imagens quiser, sem marca d'água, em lote.</p>
+  </section>
+
+  <section class="tool">
+    <div class="drop" id="drop">
+      <b>Clique ou arraste uma ou várias imagens</b>
+      <small>PNG, JPG ou WEBP — dá pra soltar várias de uma vez (modo lote)</small>
+      <input type="file" id="file" accept="image/*" multiple hidden>
+    </div>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">Estilo:</label>
+      <select id="preset">
+        <option value="cut">Corte limpo (2 cores) — ideal p/ laser</option>
+        <option value="detail">Detalhado (mais cores)</option>
+        <option value="poster">Posterizado (arte)</option>
+      </select>
+      <button class="btn" id="convert" disabled>Converter tudo</button>
+    </div>
+    <div class="status" id="status">Aguardando imagens…</div>
+    <div class="items" id="items"></div>
+  </section>
+</main>
+<footer class="wrap">VetorLaser PRO — obrigado pela compra. Suporte: seu-email@exemplo.com</footer>
+
+<script>
+  const fileInput=document.getElementById('file'),drop=document.getElementById('drop'),
+    convertBtn=document.getElementById('convert'),statusEl=document.getElementById('status'),
+    itemsEl=document.getElementById('items'),presetSel=document.getElementById('preset');
+  let queue=[]; // {name, dataUrl, svg}
+  const presets={
+    cut:{numberofcolors:2,ltres:1,qtres:1,pathomit:8,strokewidth:1,blurradius:0},
+    detail:{numberofcolors:8,ltres:1,qtres:1,pathomit:4,strokewidth:0},
+    poster:{numberofcolors:5,ltres:.5,qtres:.5,pathomit:2,strokewidth:0,blurradius:2}
+  };
+  drop.addEventListener('click',()=>fileInput.click());
+  drop.addEventListener('dragover',e=>{e.preventDefault();drop.style.borderColor='#ff5b39'});
+  drop.addEventListener('dragleave',()=>drop.style.borderColor='');
+  drop.addEventListener('drop',e=>{e.preventDefault();drop.style.borderColor='';addFiles(e.dataTransfer.files)});
+  fileInput.addEventListener('change',e=>addFiles(e.target.files));
+
+  function addFiles(files){
+    [...files].filter(f=>f.type.startsWith('image/')).forEach(f=>{
+      const r=new FileReader();
+      r.onload=ev=>{queue.push({name:f.name,dataUrl:ev.target.result,svg:null});render()};
+      r.readAsDataURL(f);
+    });
+  }
+  function render(){
+    itemsEl.innerHTML='';
+    queue.forEach((it,i)=>{
+      const div=document.createElement('div');div.className='item';
+      div.innerHTML='<div><img src="'+it.dataUrl+'"></div>'+
+        '<div id="out'+i+'"><span style="color:#3a4552;font-size:11px">—</span></div>'+
+        '<div class="name">'+it.name+'</div>'+
+        '<div id="dl'+i+'"></div>';
+      itemsEl.appendChild(div);
+      if(it.svg){
+        const o=document.getElementById('out'+i);o.innerHTML=it.svg;
+        const s=o.querySelector('svg');if(s){s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='76px'}
+        const b=document.createElement('button');b.className='btn';b.textContent='Baixar SVG';
+        b.onclick=()=>downloadSvg(it);document.getElementById('dl'+i).appendChild(b);
+      }
+    });
+    convertBtn.disabled=queue.length===0;
+    statusEl.textContent=queue.length? queue.length+' imagem(ns) na fila. Clique em Converter tudo.':'Aguardando imagens…';
+  }
+  convertBtn.addEventListener('click',()=>{
+    statusEl.textContent='Convertendo…';convertBtn.disabled=true;
+    let n=0;
+    queue.forEach(it=>{
+      if(it.svg){n++;if(n===queue.length)done();return}
+      ImageTracer.imageToSVG(it.dataUrl,svg=>{it.svg=svg;n++;render();if(n===queue.length)done()},presets[presetSel.value]);
+    });
+  });
+  function done(){convertBtn.disabled=false;statusEl.textContent='Pronto! Baixe cada SVG (limpo, sem marca d’água).'}
+  function downloadSvg(it){
+    const blob=new Blob([it.svg],{type:'image/svg+xml'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=it.name.replace(/\.[^.]+$/,'')+'-vetor.svg';a.click();URL.revokeObjectURL(a.href);
+  }
+</script>
+</body>
+</html>
