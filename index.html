@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VetorLaser — Transforme qualquer imagem em arquivo de corte a laser</title>
+<meta name="description" content="Converta PNG/JPG em SVG pronto pra corte a laser em segundos. Sem tracejar na mão. Tudo no seu navegador.">
+
+<!-- ============ META PIXEL (Pixel Renda com IA) ============ -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '970385702236594');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=970385702236594&ev=PageView&noscript=1"/></noscript>
+<!-- ============ /META PIXEL ============ -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/imagetracerjs/1.2.6/imagetracer_v1.2.6.min.js"></script>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--line:#232a34;--ink:#e6edf3;--muted:#9aa7b4;
+    --brand:#ff5b39;--brand2:#ffb020;--ok:#3fb950}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  header{border-bottom:1px solid var(--line);background:#0b0f14}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+  .logo{font-weight:800;font-size:20px;letter-spacing:-.3px}.logo span{color:var(--brand)}
+  .hero{text-align:center;padding:52px 0 26px}
+  .hero h1{font-size:40px;line-height:1.1;margin:0 0 14px;letter-spacing:-1px}.hero h1 b{color:var(--brand)}
+  .hero p{font-size:18px;color:var(--muted);max-width:660px;margin:0 auto 8px}
+  .trust{display:inline-flex;gap:8px;align-items:center;margin-top:14px;font-size:13px;color:var(--ok);
+    background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.25);padding:6px 12px;border-radius:20px}
+  .tool{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin:18px 0 30px}
+  .drop{border:2px dashed #2c3542;border-radius:12px;padding:34px;text-align:center;cursor:pointer;transition:.15s;background:#10151c}
+  .drop:hover{border-color:var(--brand);background:#12181f}.drop b{color:var(--brand)}
+  .drop small{display:block;color:var(--muted);margin-top:6px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+  .pane{background:#10151c;border:1px solid var(--line);border-radius:12px;padding:14px;min-height:230px;display:flex;flex-direction:column}
+  .pane h4{margin:0 0 10px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .pane .view{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .pane img,.pane svg{max-width:100%;max-height:200px}
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+  select{background:#10151c;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit}
+  .btn{background:var(--brand);color:#fff;border:0;border-radius:9px;padding:11px 20px;font-weight:700;cursor:pointer;font:inherit}
+  .btn:disabled{opacity:.4;cursor:not-allowed}.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .btn.gold{background:var(--brand2);color:#241a00}
+  .status{font-size:13px;color:var(--muted);margin-top:10px;min-height:18px}
+  .section-h{text-align:center;margin:30px 0 4px;font-size:26px}
+  .section-s{text-align:center;color:var(--muted);margin:0 0 22px}
+  .how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:6px 0 40px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .step .n{width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin-bottom:10px}
+  .step h4{margin:0 0 6px}.step p{margin:0;color:var(--muted);font-size:14px}
+  .pro{background:linear-gradient(135deg,#1b2230,#161b22);border:1px solid var(--brand);border-radius:16px;padding:30px;text-align:center;margin:10px 0 40px}
+  .pro h2{margin:0 0 6px;font-size:26px}.pro .price{font-size:36px;font-weight:800;margin:10px 0}
+  .pro .price small{font-size:15px;color:var(--muted);font-weight:400}
+  .pro ul{list-style:none;padding:0;margin:16px auto 20px;max-width:360px;text-align:left;color:var(--muted);font-size:15px}
+  .pro li{padding:5px 0 5px 24px;position:relative}.pro li:before{content:"✓";color:var(--ok);position:absolute;left:0}
+  .note{background:#12181f;border:1px solid var(--line);border-left:3px solid var(--brand2);border-radius:8px;padding:14px 16px;margin:10px 0 40px;font-size:14px;color:var(--muted)}
+  footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
+  @media(max-width:720px){.row,.how{grid-template-columns:1fr}.hero h1{font-size:30px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><div class="logo">Vetor<span>Laser</span></div>
+  <a class="btn gold" href="#pro" style="text-decoration:none">Virar Pro — R$27</a></div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Sua imagem virou <b>arquivo de corte a laser</b> em segundos</h1>
+    <p>Sobe seu logo ou desenho (PNG/JPG), a ferramenta traça os caminhos e devolve um <b>SVG pronto pra máquina</b>. Sem tracejar curva na mão, sem instalar programa.</p>
+    <div class="trust">🔒 Tudo roda no seu navegador — nenhum arquivo é enviado ou salvo.</div>
+  </section>
+
+  <section class="tool">
+    <div class="drop" id="drop">
+      <b>Clique aqui ou arraste uma imagem</b>
+      <small>PNG, JPG ou WEBP — funciona melhor com logos e desenhos de traço</small>
+      <input type="file" id="file" accept="image/*" hidden>
+    </div>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">Estilo do traço:</label>
+      <select id="preset">
+        <option value="cut">Corte limpo (2 cores) — ideal p/ laser</option>
+        <option value="detail">Detalhado (mais cores)</option>
+        <option value="poster">Posterizado (arte)</option>
+      </select>
+      <button class="btn" id="convert" disabled>Converter em SVG</button>
+      <button class="btn ghost" id="download" disabled>Baixar SVG (grátis)</button>
+    </div>
+    <div class="status" id="status">Aguardando uma imagem…</div>
+    <div class="row">
+      <div class="pane"><h4>Original</h4><div class="view" id="viewIn"><span style="color:#3a4552">sua imagem aparece aqui</span></div></div>
+      <div class="pane"><h4>Vetor (SVG pronto p/ máquina)</h4><div class="view" id="viewOut"><span style="color:#3a4552">o resultado aparece aqui</span></div></div>
+    </div>
+  </section>
+
+  <h2 class="section-h">Como funciona</h2>
+  <p class="section-s">Três passos. Sem conta, sem falar com ninguém.</p>
+  <div class="how">
+    <div class="step"><div class="n">1</div><h4>Sobe a imagem</h4><p>Seu logo, desenho ou foto de traço. Fica só no seu navegador.</p></div>
+    <div class="step"><div class="n">2</div><h4>A ferramenta traça</h4><p>Converte os pixels em caminhos vetoriais que a máquina de corte entende.</p></div>
+    <div class="step"><div class="n">3</div><h4>Baixa o SVG</h4><p>Pronto pro seu laser (também serve Cricut e Silhouette).</p></div>
+  </div>
+
+  <section class="pro" id="pro">
+    <h2>Virar <span style="color:var(--brand2)">Pro</span></h2>
+    <p style="color:var(--muted);margin:0">O grátis sai com uma marca d'água discreta. O Pro entrega limpo e libera tudo.</p>
+    <div class="price">R$27<small> — pagamento único, acesso vitalício</small></div>
+    <ul>
+      <li>SVG sem marca d'água</li>
+      <li>Todos os estilos de traço</li>
+      <li>Exportação em SVG e DXF</li>
+      <li>Processamento em lote (vários arquivos)</li>
+    </ul>
+    <!-- TROCAR o href pelo hotlink real da Hotmart. Manter ?src= pro rastreio por criativo -->
+    <a class="btn gold" id="proBtn" href="https://pay.hotmart.com/SEU_CODIGO_AQUI?src=site" style="text-decoration:none;font-size:17px;padding:13px 28px">Quero o Pro por R$27</a>
+    <p style="color:var(--muted);font-size:12px;margin-top:14px">Pagamento seguro via Hotmart. Garantia de 7 dias.</p>
+  </section>
+
+  <div class="note"><b>Por que isso é seguro:</b> a conversão roda 100% no seu navegador. Sua imagem <b>não sobe pra servidor nenhum</b> e nada fica guardado. Sem cadastro, sem dado pessoal.</div>
+</main>
+
+<footer class="wrap">VetorLaser © 2026 — Converta imagens em arquivos de corte a laser.</footer>
+
+<script>
+  const fileInput=document.getElementById('file'),drop=document.getElementById('drop'),
+    convertBtn=document.getElementById('convert'),downloadBtn=document.getElementById('download'),
+    statusEl=document.getElementById('status'),viewIn=document.getElementById('viewIn'),
+    viewOut=document.getElementById('viewOut'),presetSel=document.getElementById('preset'),
+    proBtn=document.getElementById('proBtn');
+  let dataUrl=null,lastSvg=null;
+  const presets={
+    cut:{numberofcolors:2,ltres:1,qtres:1,pathomit:8,strokewidth:1,blurradius:0},
+    detail:{numberofcolors:8,ltres:1,qtres:1,pathomit:4,strokewidth:0},
+    poster:{numberofcolors:5,ltres:.5,qtres:.5,pathomit:2,strokewidth:0,blurradius:2}
+  };
+  drop.addEventListener('click',()=>fileInput.click());
+  drop.addEventListener('dragover',e=>{e.preventDefault();drop.style.borderColor='#ff5b39'});
+  drop.addEventListener('dragleave',()=>drop.style.borderColor='');
+  drop.addEventListener('drop',e=>{e.preventDefault();drop.style.borderColor='';if(e.dataTransfer.files[0])loadFile(e.dataTransfer.files[0])});
+  fileInput.addEventListener('change',e=>{if(e.target.files[0])loadFile(e.target.files[0])});
+  function loadFile(f){
+    if(!f.type.startsWith('image/')){statusEl.textContent='Isso não parece uma imagem.';return}
+    const r=new FileReader();
+    r.onload=ev=>{dataUrl=ev.target.result;viewIn.innerHTML='<img src="'+dataUrl+'">';
+      viewOut.innerHTML='<span style="color:#3a4552">clique em Converter</span>';
+      convertBtn.disabled=false;downloadBtn.disabled=true;lastSvg=null;
+      statusEl.textContent='Imagem carregada: '+f.name+'. Escolha o estilo e clique em Converter.'};
+    r.readAsDataURL(f);
+  }
+  convertBtn.addEventListener('click',()=>{
+    if(!dataUrl)return;
+    statusEl.textContent='Convertendo… (roda no seu navegador, pode levar alguns segundos)';
+    convertBtn.disabled=true;
+    if(window.fbq)fbq('trackCustom','ConverteuImagem',{preset:presetSel.value});
+    setTimeout(()=>{
+      try{
+        ImageTracer.imageToSVG(dataUrl,svg=>{
+          lastSvg=svg;viewOut.innerHTML=svg;
+          const s=viewOut.querySelector('svg');
+          if(s){s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='200px'}
+          downloadBtn.disabled=false;convertBtn.disabled=false;
+          statusEl.textContent='Pronto! Confira o vetor e baixe. (Grátis sai com marca d’água — o Pro entrega limpo.)';
+        },presets[presetSel.value]);
+      }catch(err){statusEl.textContent='Erro na conversão: '+err.message;convertBtn.disabled=false}
+    },60);
+  });
+  // Download grátis: injeta marca d'água discreta no SVG
+  downloadBtn.addEventListener('click',()=>{
+    if(!lastSvg)return;
+    let out=lastSvg;
+    const mark='<text x="6" y="98%" font-family="sans-serif" font-size="14" fill="gray" opacity="0.6">VetorLaser.com — versão grátis</text>';
+    out=out.replace('</svg>',mark+'</svg>');
+    const blob=new Blob([out],{type:'image/svg+xml'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vetorlaser-gratis.svg';a.click();URL.revokeObjectURL(a.href);
+    if(window.fbq)fbq('trackCustom','BaixouGratis');
+    statusEl.textContent='Baixado com marca d’água. Quer sem marca + lote + DXF? Vira Pro por R$27.';
+  });
+  proBtn.addEventListener('click',()=>{if(window.fbq)fbq('track','InitiateCheckout',{value:27,currency:'BRL'})});
+</script>
+</body>
+</html>
