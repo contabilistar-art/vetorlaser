@@ -1287,6 +1287,14 @@ if(typeof define === 'function' && define.amd){
   footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
   @media(max-width:720px){.row,.how{grid-template-columns:1fr}.hero h1{font-size:30px}}
 </style>
+<style>
+.steps{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:0 0 18px}
+.stp{font-size:13px;font-weight:600;color:var(--muted);background:#141a24;border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+.stp.on{color:#fff;background:#ff5b39;border-color:#ff5b39}
+.stp.done{color:#7ee0a5;background:#0f1a14;border-color:#2f6b45}
+.btn.pulse{animation:pl 1.5s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(255,91,57,.55)}70%{box-shadow:0 0 0 12px rgba(255,91,57,0)}100%{box-shadow:0 0 0 0 rgba(255,91,57,0)}}
+</style>
 </head>
 <body>
 <header><div class="wrap nav"><div class="logo">Vetor<span>Laser</span></div>
@@ -1300,6 +1308,12 @@ if(typeof define === 'function' && define.amd){
   </section>
 
   <section class="tool">
+    <div class="steps" id="steps">
+      <span class="stp on" data-s="1">1 · Solte a imagem</span>
+      <span class="stp" data-s="2">2 · Escolha o estilo</span>
+      <span class="stp" data-s="3">3 · Converter</span>
+      <span class="stp" data-s="4">4 · Baixar</span>
+    </div>
     <div class="drop" id="drop">
       <b>Clique aqui ou arraste uma imagem</b>
       <small>PNG, JPG ou WEBP — funciona melhor com logos e desenhos de traço</small>
@@ -1313,7 +1327,7 @@ if(typeof define === 'function' && define.amd){
         <option value="poster">Posterizado (arte)</option>
       </select>
       <button class="btn" id="convert" disabled>Converter em SVG</button>
-      <button class="btn" id="download" style="background:var(--ok)" disabled>⬇ Baixar SVG grátis</button>
+      <button class="btn" id="download" style="background:var(--ok);display:none">⬇ Baixar SVG grátis</button>
     </div>
     <div class="status" id="status">Aguardando uma imagem…</div>
     <div class="row">
@@ -1350,6 +1364,11 @@ if(typeof define === 'function' && define.amd){
 
 <footer class="wrap">VetorLaser © 2026 — Converta imagens em arquivos de corte a laser.</footer>
 
+<a href="#pro" id="floatPro" class="btn gold" style="position:fixed;right:18px;bottom:18px;z-index:60;text-decoration:none;padding:11px 20px;border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.4);transition:opacity .25s,transform .25s;display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.2">
+  <span style="font-size:15px;font-weight:800">✨ Virar Pro — sem marca d'água</span>
+  <span style="font-size:12.5px;font-weight:600;opacity:.88">pagamento único R$27,00</span>
+</a>
+
 <script>
   const fileInput=document.getElementById('file'),drop=document.getElementById('drop'),
     convertBtn=document.getElementById('convert'),downloadBtn=document.getElementById('download'),
@@ -1357,6 +1376,8 @@ if(typeof define === 'function' && define.amd){
     viewOut=document.getElementById('viewOut'),presetSel=document.getElementById('preset'),
     proBtn=document.getElementById('proBtn');
   let dataUrl=null,lastSvg=null;
+  const stepEls=[...document.querySelectorAll('.stp')];
+  function setStep(n){stepEls.forEach(s=>{const i=+s.dataset.s;s.classList.toggle('done',i<n);s.classList.toggle('on',i===n)})}
   const presets={
     cut:{numberofcolors:2,ltres:1,qtres:1,pathomit:8,strokewidth:1,blurradius:0},
     detail:{numberofcolors:8,ltres:1,qtres:1,pathomit:4,strokewidth:0},
@@ -1372,14 +1393,16 @@ if(typeof define === 'function' && define.amd){
     const r=new FileReader();
     r.onload=ev=>{dataUrl=ev.target.result;viewIn.innerHTML='<img src="'+dataUrl+'">';
       viewOut.innerHTML='<span style="color:#3a4552">clique em Converter</span>';
-      convertBtn.disabled=false;downloadBtn.disabled=true;lastSvg=null;
-      statusEl.textContent='Imagem carregada: '+f.name+'. Escolha o estilo e clique em Converter.'};
+      convertBtn.disabled=false;convertBtn.classList.add('pulse');
+      downloadBtn.style.display='none';downloadBtn.disabled=true;downloadBtn.classList.remove('pulse');
+      lastSvg=null;setStep(3);
+      statusEl.textContent='Imagem carregada: '+f.name+'. Escolha o estilo e clique em “Converter em SVG”.'};
     r.readAsDataURL(f);
   }
   convertBtn.addEventListener('click',()=>{
     if(!dataUrl)return;
     statusEl.textContent='Convertendo… (roda no seu navegador, pode levar alguns segundos)';
-    convertBtn.disabled=true;
+    convertBtn.disabled=true;convertBtn.classList.remove('pulse');
     if(window.fbq)fbq('trackCustom','ConverteuImagem',{preset:presetSel.value});
     setTimeout(()=>{
       try{
@@ -1387,8 +1410,8 @@ if(typeof define === 'function' && define.amd){
           lastSvg=svg;viewOut.innerHTML=svg;
           const s=viewOut.querySelector('svg');
           if(s){s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='200px'}
-          downloadBtn.disabled=false;convertBtn.disabled=false;
-          statusEl.textContent='Pronto! Confira o vetor e baixe. (Grátis sai com marca d’água — o Pro entrega limpo.)';
+          downloadBtn.style.display='';downloadBtn.disabled=false;downloadBtn.classList.add('pulse');convertBtn.disabled=false;setStep(4);
+          statusEl.textContent='Pronto! Agora clique em “Baixar SVG grátis” 👇  (o grátis sai com marca d’água — o Pro entrega limpo.)';
         },presets[presetSel.value]);
       }catch(err){statusEl.textContent='Erro na conversão: '+err.message;convertBtn.disabled=false}
     },60);
@@ -1407,9 +1430,19 @@ if(typeof define === 'function' && define.amd){
     const blob=new Blob([out],{type:'image/svg+xml'});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vetorlaser-gratis.svg';a.click();URL.revokeObjectURL(a.href);
     if(window.fbq)fbq('trackCustom','BaixouGratis');
+    downloadBtn.classList.remove('pulse');setStep(5);
     statusEl.textContent='Baixado com marca d’água. Quer sem marca + lote + DXF? Vira Pro por R$27.';
   });
   proBtn.addEventListener('click',()=>{if(window.fbq)fbq('track','InitiateCheckout',{value:27,currency:'BRL'})});
+  // Botão flutuante Pro: some quando a seção Pro está visível
+  const floatPro=document.getElementById('floatPro'),proSec=document.getElementById('pro');
+  if(floatPro&&proSec&&'IntersectionObserver'in window){
+    new IntersectionObserver(es=>es.forEach(e=>{
+      floatPro.style.opacity=e.isIntersecting?'0':'1';
+      floatPro.style.pointerEvents=e.isIntersecting?'none':'auto';
+      floatPro.style.transform=e.isIntersecting?'translateY(12px)':'none';
+    }),{threshold:.2}).observe(proSec);
+  }
 </script>
 </body>
 </html>
