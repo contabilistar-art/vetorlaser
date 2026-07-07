@@ -1346,7 +1346,7 @@ if(typeof define === 'function' && define.amd){
 
   <section class="pro" id="pro">
     <h2>Virar <span style="color:var(--brand2)">Pro</span></h2>
-    <p style="color:var(--muted);margin:0">O grátis sai com uma marca d'água discreta. O Pro entrega limpo e libera tudo.</p>
+    <p style="color:var(--muted);margin:0">No grátis você baixa 1 por vez. O Pro libera o modo lote e formatos extras.</p>
     <div style="text-align:center;margin:4px 0 18px"><div style="font-size:15px;color:#9aa3b2;letter-spacing:.5px">De <s style="color:#ff5b39;text-decoration-thickness:2px">R$ 97</s> por apenas</div><div style="font-size:60px;font-weight:900;line-height:1.05;color:#ffcf5c;margin:2px 0">R$ 27</div><div style="display:inline-block;background:#123a24;color:#7ee0a5;font-weight:800;font-size:21px;padding:12px 26px;border-radius:999px;margin-top:10px">✔ PAGAMENTO ÚNICO — sem mensalidade, sem recorrência</div></div>
     <ul>
       <li>SVG sem marca d'água</li>
@@ -1417,17 +1417,7 @@ if(typeof define === 'function' && define.amd){
     },60);
   });
   // Download grátis: injeta marca d'água discreta no SVG
-  downloadBtn.addEventListener('click',()=>{
-    if(!lastSvg)return;
-    let out=lastSvg;
-    const wm=parseInt((lastSvg.match(/width="(\d+)"/)||[])[1])||600;
-    const hm=parseInt((lastSvg.match(/height="(\d+)"/)||[])[1])||600;
-    const fs=Math.max(28,Math.round(wm*0.16));
-    const cx=wm/2, cy=hm/2;
-    const mark='<text x="'+cx+'" y="'+cy+'" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="'+fs+'" fill="#ff5b39" opacity="0.9" transform="rotate(-30 '+cx+' '+cy+')">VetorLaser • GRÁTIS</text>'+
-      '<text x="'+cx+'" y="'+(hm-14)+'" text-anchor="middle" font-family="sans-serif" font-size="'+Math.max(12,Math.round(wm*0.025))+'" fill="#ff5b39" opacity="0.7">Remova a marca no Pro — vetorlaser.com</text>';
-    out=out.replace('</svg>',mark+'</svg>');
-    const blob=new Blob([out],{type:'image/svg+xml'});
+  downloadBtn.addEventListener('click',()=>{if(!lastSvg)return;const blob=new Blob([lastSvg],{type:'image/svg+xml'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vetorlaser.svg';a.click();URL.revokeObjectURL(a.href);let n=parseInt(localStorage.getItem('vl_dl')||'0')+1;localStorage.setItem('vl_dl',String(n));if(window.fbq){fbq('trackCustom','BaixouGratis',{n:n});if(n<=3){fbq('trackCustom','Gratis_'+n+(n>1?'downloads':'download'));}else if(n===4){fbq('trackCustom','Gratis_4mais');}}downloadBtn.classList.remove('pulse');setStep(5);statusEl.textContent=(n===1)?'Baixado grátis, limpo! Gostou? Vetorize outra ou pegue o Pro (R$27, ilimitado).':('Você já baixou '+n+' arquivos grátis. Curtiu? O Pro entrega ilimitado por R$27.');});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vetorlaser-gratis.svg';a.click();URL.revokeObjectURL(a.href);
     if(window.fbq)fbq('trackCustom','BaixouGratis');
     downloadBtn.classList.remove('pulse');setStep(5);
