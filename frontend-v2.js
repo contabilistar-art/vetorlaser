@@ -1,4 +1,4 @@
-a(function(){
+(function(){
   var API = "https://vetorlaser-gate.transformaebooks.workers.dev";
   var dl = document.getElementById('download');
   if(!dl) return;
