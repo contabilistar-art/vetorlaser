@@ -1307,7 +1307,7 @@ if(typeof define === 'function' && define.amd){
     <div class="trust">🔒 Tudo roda no seu navegador — nenhum arquivo é enviado ou salvo.</div>
   </section>
 
-  <div style="background:#160f04;border:1.5px solid #ffcf5c;border-radius:14px;padding:12px 18px;margin:0 0 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 14px;text-align:center"><span style="font-weight:800;color:#ffcf5c;font-size:15px">Sem marca d'água no Pro</span><span style="color:#9aa3b2;font-size:15px">de <s style="color:#ff5b39">R$97</s></span><span style="font-weight:900;color:#fff;font-size:24px;line-height:1">por R$27</span><span style="background:#123a24;color:#7ee0a5;font-weight:800;font-size:16px;padding:8px 16px;border-radius:999px">pagamento único</span><a href="#pro" style="background:#ffcf5c;color:#160f04;font-weight:800;text-decoration:none;padding:9px 18px;border-radius:999px;font-size:14px">Quero o Pro →</a></div><section class="tool">
+  <div style="background:#160f04;border:1.5px solid #ffcf5c;border-radius:14px;padding:12px 18px;margin:0 0 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 14px;text-align:center"><span style="font-weight:800;color:#ffcf5c;font-size:15px">Pro: downloads ilimitados</span><span style="color:#9aa3b2;font-size:15px">de <s style="color:#ff5b39">R$97</s></span><span style="font-weight:900;color:#fff;font-size:24px;line-height:1">por R$27</span><span style="background:#123a24;color:#7ee0a5;font-weight:800;font-size:16px;padding:8px 16px;border-radius:999px">pagamento único</span><a href="#pro" style="background:#ffcf5c;color:#160f04;font-weight:800;text-decoration:none;padding:9px 18px;border-radius:999px;font-size:14px">Quero o Pro →</a></div><section class="tool">
     <div class="steps" id="steps">
       <span class="stp on" data-s="1">1 · Solte a imagem</span>
       <span class="stp" data-s="2">2 · Escolha o estilo</span>
@@ -1346,10 +1346,10 @@ if(typeof define === 'function' && define.amd){
 
   <section class="pro" id="pro">
     <h2>Virar <span style="color:var(--brand2)">Pro</span></h2>
-    <p style="color:var(--muted);margin:0">No grátis você baixa 1 por vez. O Pro libera o modo lote e formatos extras.</p>
+    <p style="color:var(--muted);margin:0">No grátis são 2 downloads por mês. O Pro libera downloads ilimitados, modo lote e formatos extras.</p>
     <div style="text-align:center;margin:4px 0 18px"><div style="font-size:15px;color:#9aa3b2;letter-spacing:.5px">De <s style="color:#ff5b39;text-decoration-thickness:2px">R$ 97</s> por apenas</div><div style="font-size:60px;font-weight:900;line-height:1.05;color:#ffcf5c;margin:2px 0">R$ 27</div><div style="display:inline-block;background:#123a24;color:#7ee0a5;font-weight:800;font-size:21px;padding:12px 26px;border-radius:999px;margin-top:10px">✔ PAGAMENTO ÚNICO — sem mensalidade, sem recorrência</div></div>
     <ul>
-      <li>SVG sem marca d'água</li>
+      <li>Downloads ilimitados (grátis: 2/mês)</li>
       <li>Todos os estilos de traço</li>
       <li>Exportação em SVG e DXF</li>
       <li>Processamento em lote (vários arquivos)</li>
@@ -1365,7 +1365,7 @@ if(typeof define === 'function' && define.amd){
 <footer class="wrap">VetorLaser © 2026 — Converta imagens em arquivos de corte a laser.</footer>
 
 <a href="#pro" id="floatPro" class="btn gold" style="position:fixed;right:18px;bottom:18px;z-index:60;text-decoration:none;padding:11px 20px;border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.4);transition:opacity .25s,transform .25s;display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.2">
-  <span style="font-size:15px;font-weight:800">✨ Virar Pro — sem marca d'água</span>
+  <span style="font-size:15px;font-weight:800">✨ Virar Pro — ilimitado</span>
   <span style="font-size:12.5px;font-weight:600;opacity:.88">pagamento único R$27,00</span>
 </a>
 
@@ -1411,13 +1411,13 @@ if(typeof define === 'function' && define.amd){
           const s=viewOut.querySelector('svg');
           if(s){s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='200px'}
           downloadBtn.style.display='';downloadBtn.disabled=false;downloadBtn.classList.add('pulse');convertBtn.disabled=false;setStep(4);
-          statusEl.textContent='Pronto! Agora clique em “Baixar SVG grátis” 👇  (o grátis sai com marca d’água — o Pro entrega limpo.)';
+          statusEl.textContent='Pronto! Agora clique em “Baixar SVG grátis” 👇  (são 2 downloads grátis por mês, sem marca d'água.)';
         },presets[presetSel.value]);
       }catch(err){statusEl.textContent='Erro na conversão: '+err.message;convertBtn.disabled=false}
     },60);
   });
   // Download grátis: injeta marca d'água discreta no SVG
-  downloadBtn.addEventListener('click',()=>{if(!lastSvg)return;const blob=new Blob([lastSvg],{type:'image/svg+xml'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vetorlaser.svg';a.click();URL.revokeObjectURL(a.href);let n=parseInt(localStorage.getItem('vl_dl')||'0')+1;localStorage.setItem('vl_dl',String(n));if(window.fbq){fbq('trackCustom','BaixouGratis',{n:n});if(n<=3){fbq('trackCustom','Gratis_'+n+(n>1?'downloads':'download'));}else if(n===4){fbq('trackCustom','Gratis_4mais');}}downloadBtn.classList.remove('pulse');setStep(5);statusEl.textContent=(n===1)?'Baixado grátis, limpo! Gostou? Vetorize outra ou pegue o Pro (R$27, ilimitado).':('Você já baixou '+n+' arquivos grátis. Curtiu? O Pro entrega ilimitado por R$27.');});
+  downloadBtn.addEventListener('click',()=>{if(!lastSvg)return;if(!window.__vlAllowNext){if(window.__vlGate)window.__vlGate();return;}window.__vlAllowNext=false;const blob=new Blob([lastSvg],{type:'image/svg+xml'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vetorlaser.svg';a.click();URL.revokeObjectURL(a.href);let n=parseInt(localStorage.getItem('vl_dl')||'0')+1;localStorage.setItem('vl_dl',String(n));if(window.fbq){fbq('trackCustom','BaixouGratis',{n:n});if(n<=3){fbq('trackCustom','Gratis_'+n+(n>1?'downloads':'download'));}else if(n===4){fbq('trackCustom','Gratis_4mais');}}downloadBtn.classList.remove('pulse');setStep(5);statusEl.textContent=(n===1)?'Baixado grátis, limpo! Gostou? Vetorize outra ou pegue o Pro (R$27, ilimitado).':('Você já baixou '+n+' arquivos grátis. Curtiu? O Pro entrega ilimitado por R$27.');});
   proBtn.addEventListener('click',()=>{if(window.fbq)fbq('track','InitiateCheckout',{value:27,currency:'BRL'})});
   // Botão flutuante Pro: some quando a seção Pro está visível
   const floatPro=document.getElementById('floatPro'),proSec=document.getElementById('pro');
@@ -1430,9 +1430,6 @@ if(typeof define === 'function' && define.amd){
   }
 </script>
 
-<!-- Captura de e-mail (Brevo/sibforms) - LGPD -->
-<script>
-(function(){var SIB="https://8cfc3740.sibforms.com/serve/MUIFAGKLkfzILotYDP3p1yHQXbnLux22hisvGPfrI9h4fEyB0xA-RHmliiPA1DsrJup-Xqsu34LVm98cJVbETJyoVXYcvOH5SEZRNkx7wuhL8LM5U-TThIkfm2UwNnWZheYbCmGATuVHIrxzgCZc5VQQftkFMgbUhYBogQ8G82bL3U3QlhAm8OeRLZchm-E2ySk3AOgu_rT1nwsI5A==";var dl=document.getElementById('download'); if(!dl) return;var html='<div id="vlCap" style="display:none;margin:14px auto 0;max-width:440px;padding:16px;border:1px solid #ffd9cf;border-radius:12px;background:#fff7f4;text-align:left">'+'<div id="vlCapForm">'+'<p style="margin:0 0 10px;font-weight:600;color:#1a1a1a">Baixou! \uD83C\uDF89 Quer dicas de corte + seu link do Pro com desconto no e-mail?</p>'+'<input id="vlEmail" type="email" autocomplete="email" placeholder="seu@email.com" style="width:100%;box-sizing:border-box;padding:11px;border:1px solid #ddd;border-radius:8px;font-size:15px">'+'<label style="display:flex;gap:8px;align-items:flex-start;margin:10px 0;font-size:13px;color:#444;cursor:pointer">'+'<input id="vlConsent" type="checkbox" style="margin-top:3px;flex:0 0 auto">'+'<span>Aceito receber e-mails do VetorLaser e li a <a href="privacidade.html" target="_blank" rel="noopener" style="color:#ff5b39">Pol\u00edtica de Privacidade</a>.</span>'+'</label>'+'<button id="vlSend" type="button" style="width:100%;padding:12px;border:0;border-radius:8px;background:#ff5b39;color:#fff;font-weight:700;font-size:15px;cursor:pointer">Quero receber</button>'+'<p id="vlErr" style="display:none;margin:8px 0 0;color:#c0392b;font-size:13px"></p>'+'</div>'+'<p id="vlThanks" style="display:none;margin:0;font-weight:600;color:#1a7f37;text-align:center">Pronto! Abra seu e-mail e confirme o cadastro. \u2705</p>'+'</div>';var wrap=document.createElement('div'); wrap.innerHTML=html; var cap=wrap.firstChild;var anchor=document.getElementById('status')||dl; anchor.insertAdjacentElement('afterend',cap);var ifr=document.createElement('iframe'); ifr.name='vlSibFrame'; ifr.style.display='none'; ifr.setAttribute('aria-hidden','true'); document.body.appendChild(ifr);var f=document.createElement('form'); f.action=SIB; f.method='POST'; f.target='vlSibFrame'; f.style.display='none';f.innerHTML='<input type="hidden" name="EMAIL"><input type="hidden" name="email_address_check" value=""><input type="hidden" name="locale" value="pt">';document.body.appendChild(f);var shown=false; dl.addEventListener('click',function(){ if(!shown){shown=true; cap.style.display='block';} });var sent=false;cap.querySelector('#vlSend').addEventListener('click',function(){if(sent) return;var em=(cap.querySelector('#vlEmail').value||'').trim();var ok=cap.querySelector('#vlConsent').checked;var err=cap.querySelector('#vlErr');if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ err.textContent='Digite um e-mail v\u00e1lido.'; err.style.display='block'; return; }if(!ok){ err.textContent='Marque o aceite pra continuar.'; err.style.display='block'; return; }err.style.display='none';f.EMAIL.value=em; f.email_address_check.value=''; f.locale.value='pt';try{ f.submit(); }catch(e){}sent=true;cap.querySelector('#vlCapForm').style.display='none';cap.querySelector('#vlThanks').style.display='block';if(window.fbq) fbq('trackCustom','LeadCapturado');});})();
-</script>
+<script src="frontend-v2.js?v=2"></script>
 </body>
 </html>
