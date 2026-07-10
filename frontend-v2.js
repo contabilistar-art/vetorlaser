@@ -36,6 +36,7 @@
   function openGate(){ box.style.display='block'; show($('vlStep1')); hide($('vlStep2')); hide($('vlStepPro')); setMsg(''); try{box.scrollIntoView({block:'center',behavior:'smooth'});}catch(e){} var e=$('vlEmail'); if(e) e.focus(); }
   function doDownload(){ window.__vlAllowNext=true; dl.click(); }
   function showPro(){ box.style.display='block'; hide($('vlStep1')); hide($('vlStep2')); show($('vlStepPro')); setMsg(''); }
+  function showRemaining(rem){ box.style.display='block'; hide($('vlStep1')); hide($('vlStep2')); hide($('vlStepPro')); if(rem>0){ setMsg('Baixado! \u2705 Te resta '+rem+' download gr\u00e1tis este m\u00eas.', '#1a7f37'); } else { setMsg('Baixado! \u2705 Esse foi seu \u00faltimo gr\u00e1tis do m\u00eas. Vira Pro pra baixar ilimitado.', '#1a7f37'); } }
 
   var busy=false;
   function post(action, payload){
@@ -49,7 +50,7 @@
       box.style.display='block'; hide($('vlStep1')); hide($('vlStep2')); hide($('vlStepPro')); setMsg('Liberando seu download...', '#555');
       post('consume', {token: token}).then(function(res){
         busy=false;
-        if(res.body && res.body.ok){ setMsg(''); box.style.display='none'; doDownload(); }
+        if(res.body && res.body.ok){ doDownload(); showRemaining(res.body.remaining); }
         else if(res.body && res.body.reason==='limit'){ showPro(); }
         else { try{ localStorage.removeItem('vl_token'); }catch(e){} openGate(); }
       }).catch(function(){ busy=false; openGate(); setMsg('Deu um erro de conexão. Tenta de novo.'); });
@@ -81,9 +82,8 @@
         busy=false; $('vlVerifyBtn').disabled=false;
         if(res.body && res.body.ok){
           if(res.body.token){ try{ localStorage.setItem('vl_token', res.body.token); }catch(e){} }
-          setMsg(''); box.style.display='none';
           if(window.fbq) fbq('trackCustom','LeadVerificado');
-          doDownload();
+          doDownload(); showRemaining(res.body.remaining);
         } else if(res.body && res.body.reason==='limit'){
           if(res.body.token){ try{ localStorage.setItem('vl_token', res.body.token); }catch(e){} }
           showPro();
