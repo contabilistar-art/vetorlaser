@@ -1411,7 +1411,7 @@ if(typeof define === 'function' && define.amd){
           const s=viewOut.querySelector('svg');
           if(s){s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='200px'}
           downloadBtn.style.display='';downloadBtn.disabled=false;downloadBtn.classList.add('pulse');convertBtn.disabled=false;setStep(4);
-          statusEl.textContent='Pronto! Agora clique em “Baixar SVG grátis” 👇  (são 2 downloads grátis por mês, sem marca d'água.)';
+          statusEl.textContent='Pronto! Agora clique em “Baixar SVG grátis” 👇  (são 2 downloads grátis por mês, sem marca d\'água.)';
         },presets[presetSel.value]);
       }catch(err){statusEl.textContent='Erro na conversão: '+err.message;convertBtn.disabled=false}
     },60);
