@@ -1351,7 +1351,7 @@ if(typeof define === 'function' && define.amd){
     <ul>
       <li>Downloads ilimitados (grátis: 2/mês)</li>
       <li>Todos os estilos de traço</li>
-      <li>Exportação em SVG e DXF</li>
+      <li>Exportação em SVG (Lightburn, Cricut, Silhouette, Inkscape)</li>
       <li>Processamento em lote (vários arquivos)</li>
     </ul>
     <!-- TROCAR o href pelo hotlink real da Hotmart. Manter ?src= pro rastreio por criativo -->
@@ -1409,7 +1409,7 @@ if(typeof define === 'function' && define.amd){
         ImageTracer.imageToSVG(dataUrl,svg=>{
           lastSvg=svg;viewOut.innerHTML=svg;
           const s=viewOut.querySelector('svg');
-          if(s){s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='200px'}
+          if(s){s.setAttribute('viewBox','0 0 '+s.getAttribute('width')+' '+s.getAttribute('height'));s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='200px'}
           downloadBtn.style.display='';downloadBtn.disabled=false;downloadBtn.classList.add('pulse');convertBtn.disabled=false;setStep(4);
           statusEl.textContent='Pronto! Agora clique em “Baixar SVG grátis” 👇  (são 2 downloads grátis por mês, sem marca d\'água.)';
         },presets[presetSel.value]);
