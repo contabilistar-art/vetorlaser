@@ -1327,10 +1327,10 @@ if(typeof define === 'function' && define.amd){
     statusEl.textContent=queue.length? queue.length+' imagem(ns) na fila. Clique em Converter tudo.':'Aguardando imagens…';
   }
   convertBtn.addEventListener('click',()=>{
-    statusEl.textContent='Convertendo…';convertBtn.disabled=true;
+    statusEl.textContent='Convertendo…';convertBtn.disabled=true;queue.forEach(it=>it.svg=null);
     let n=0;
     queue.forEach(it=>{
-      if(it.svg){n++;if(n===queue.length)done();return}
+
       ImageTracer.imageToSVG(it.dataUrl,svg=>{it.svg=svg;n++;render();if(n===queue.length)done()},presets[presetSel.value]);
     });
   });
