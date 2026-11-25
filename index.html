@@ -1391,12 +1391,12 @@ if(typeof define === 'function' && define.amd){
   function loadFile(f){
     if(!f.type.startsWith('image/')){statusEl.textContent='Isso não parece uma imagem.';return}
     const r=new FileReader();
-    r.onload=ev=>{dataUrl=ev.target.result;viewIn.innerHTML='<img src="'+dataUrl+'">';
+    r.onload=ev=>{const _t=new Image();_t.onerror=()=>{dataUrl=null;convertBtn.disabled=true;convertBtn.classList.remove('pulse');statusEl.textContent='Não consegui abrir essa imagem. Tente outro arquivo (PNG ou JPG).'};_t.onload=()=>{dataUrl=ev.target.result;viewIn.innerHTML='<img src="'+dataUrl+'">';
       viewOut.innerHTML='<span style="color:#3a4552">clique em Converter</span>';
       convertBtn.disabled=false;convertBtn.classList.add('pulse');
       downloadBtn.style.display='none';downloadBtn.disabled=true;downloadBtn.classList.remove('pulse');
       lastSvg=null;setStep(3);
-      statusEl.textContent='Imagem carregada: '+f.name+'. Escolha o estilo e clique em “Converter em SVG”.'};
+      statusEl.textContent='Imagem carregada: '+f.name+'. Escolha o estilo e clique em “Converter em SVG”.'};_t.src=ev.target.result};
     r.readAsDataURL(f);
   }
   convertBtn.addEventListener('click',()=>{
