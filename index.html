@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VetorLaser — Transforme qualquer imagem em arquivo de corte a laser</title>
 <meta name="description" content="Converta PNG/JPG em SVG pronto pra corte a laser em segundos. Sem tracejar na mão. Tudo no seu navegador.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%230d1117%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%279%27 fill=%27none%27 stroke=%27%23ff5b39%27 stroke-width=%273%27/%3E%3C/svg%3E">
 <meta property="og:title" content="VetorLaser — imagem em SVG para corte a laser">
 <meta property="og:description" content="Transforme PNG ou JPG em SVG pronto para corte a laser, Cricut e Silhouette, direto no navegador.">
 <meta property="og:image" content="https://contabilistar-art.github.io/vetorlaser/capa.png">
@@ -1290,6 +1291,7 @@ if(typeof define === 'function' && define.amd){
   .note{background:#12181f;border:1px solid var(--line);border-left:3px solid var(--brand2);border-radius:8px;padding:14px 16px;margin:10px 0 40px;font-size:14px;color:var(--muted)}
   footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
   @media(max-width:720px){.row,.how{grid-template-columns:1fr}.hero h1{font-size:30px}}
+select,input,button{max-width:100%}
 </style>
 <style>
 .steps{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:0 0 18px}
@@ -1350,11 +1352,11 @@ if(typeof define === 'function' && define.amd){
 
   <section class="pro" id="pro">
     <h2>Virar <span style="color:var(--brand2)">Pro</span></h2>
-    <p style="color:var(--muted);margin:0">No grátis são 2 downloads por mês. O Pro libera downloads ilimitados, modo lote e formatos extras.</p>
+    <p style="color:var(--muted);margin:0">No grátis são 2 downloads por mês. O Pro libera downloads ilimitados e o modo lote (várias imagens de uma vez).</p>
     <div style="text-align:center;margin:4px 0 18px"><div style="font-size:15px;color:#9aa3b2;letter-spacing:.5px">Pagamento único</div><div style="font-size:60px;font-weight:900;line-height:1.05;color:#ffcf5c;margin:2px 0">R$ 27</div><div style="display:inline-block;background:#123a24;color:#7ee0a5;font-weight:800;font-size:21px;padding:12px 26px;border-radius:999px;margin-top:10px">✔ PAGAMENTO ÚNICO — sem mensalidade, sem recorrência</div></div>
     <ul>
       <li>Downloads ilimitados (grátis: 2/mês)</li>
-      <li>Todos os estilos de traço</li>
+      <li>Acesso vitalício, sem mensalidade</li>
       <li>Exportação em SVG (Lightburn, Cricut, Silhouette, Inkscape)</li>
       <li>Processamento em lote (vários arquivos)</li>
     </ul>
@@ -1363,7 +1365,7 @@ if(typeof define === 'function' && define.amd){
     <p style="color:var(--muted);font-size:12px;margin-top:14px">Pagamento seguro via Hotmart. Garantia de 7 dias.</p>
   </section>
 
-  <div class="note"><b>Por que isso é seguro:</b> a conversão roda 100% no seu navegador. Sua imagem <b>não sobe pra servidor nenhum</b> e nada fica guardado. Sem cadastro, sem dado pessoal.</div>
+  <div class="note"><b>Por que isso é seguro:</b> a conversão roda 100% no seu navegador. Sua imagem <b>não sobe pra servidor nenhum</b> e não fica guardada. Para baixar grátis, pedimos só o seu e-mail (para enviar o código de liberação).</div>
 </main>
 
 <footer class="wrap">VetorLaser © 2026 — Converta imagens em arquivos de corte a laser. Suporte: <a href="mailto:transformaebooks@gmail.com" style="color:inherit">transformaebooks@gmail.com</a> · <a href="privacidade.html" style="color:inherit">Privacidade</a></footer>
@@ -1415,7 +1417,7 @@ if(typeof define === 'function' && define.amd){
           const s=viewOut.querySelector('svg');
           if(s){s.setAttribute('viewBox','0 0 '+s.getAttribute('width')+' '+s.getAttribute('height'));s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='200px'}
           downloadBtn.style.display='';downloadBtn.disabled=false;downloadBtn.classList.add('pulse');convertBtn.disabled=false;setStep(4);
-          statusEl.textContent='Pronto! Agora clique em “Baixar SVG grátis” 👇  (são 2 downloads grátis por mês, sem marca d\'água.)';
+          statusEl.textContent='Pronto! Agora clique em “Baixar SVG grátis” 👇  (são 2 downloads grátis por mês, sem marca d\'água.)';if(svg.length>1048576){statusEl.textContent+=' Atenção: este arquivo ficou pesado ('+(svg.length/1048576).toFixed(1)+' MB) e pode travar o programa da máquina. Para corte, prefira o estilo “Corte limpo” ou uma imagem mais simples.'}
         },presets[presetSel.value]);
       }catch(err){statusEl.textContent='Erro na conversão: '+err.message;convertBtn.disabled=false}
     },60);
