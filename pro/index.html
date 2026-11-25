@@ -1303,7 +1303,7 @@ if(typeof define === 'function' && define.amd){
   function addFiles(files){
     [...files].filter(f=>f.type.startsWith('image/')).forEach(f=>{
       const r=new FileReader();
-      r.onload=ev=>{queue.push({name:f.name,dataUrl:ev.target.result,svg:null});render()};
+      r.onload=ev=>{const _t=new Image();_t.onload=()=>{queue.push({name:f.name,dataUrl:ev.target.result,svg:null});render()};_t.onerror=()=>{statusEl.textContent='Não consegui abrir '+f.name+'. Esse arquivo foi ignorado.'};_t.src=ev.target.result};
       r.readAsDataURL(f);
     });
   }
