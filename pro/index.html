@@ -1318,7 +1318,7 @@ if(typeof define === 'function' && define.amd){
       itemsEl.appendChild(div);
       if(it.svg){
         const o=document.getElementById('out'+i);o.innerHTML=it.svg;
-        const s=o.querySelector('svg');if(s){s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='76px'}
+        const s=o.querySelector('svg');if(s){s.setAttribute('viewBox','0 0 '+s.getAttribute('width')+' '+s.getAttribute('height'));s.removeAttribute('width');s.removeAttribute('height');s.style.maxHeight='76px'}
         const b=document.createElement('button');b.className='btn';b.textContent='Baixar SVG';
         b.onclick=()=>downloadSvg(it);document.getElementById('dl'+i).appendChild(b);
       }
