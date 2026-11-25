@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>VetorLaser PRO — Sua ferramenta de vetorização</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%230d1117%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%279%27 fill=%27none%27 stroke=%27%23ff5b39%27 stroke-width=%273%27/%3E%3C/svg%3E">
 <script>
 /* imagetracerjs 1.2.6 inline */
 /*
@@ -1251,6 +1252,7 @@ if(typeof define === 'function' && define.amd){
   .item img,.item svg{max-width:76px;max-height:76px}
   .item .name{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:13px;text-align:center}
+select,input,button{max-width:100%}
 </style>
 </head>
 <body>
@@ -1334,7 +1336,7 @@ if(typeof define === 'function' && define.amd){
       ImageTracer.imageToSVG(it.dataUrl,svg=>{it.svg=svg;n++;render();if(n===queue.length)done()},presets[presetSel.value]);
     });
   });
-  function done(){convertBtn.disabled=false;statusEl.textContent='Pronto! Baixe cada SVG (limpo, sem marca d’água).'}
+  function done(){convertBtn.disabled=false;statusEl.textContent='Pronto! Baixe cada SVG (limpo, sem marca d’água).';const pes=queue.filter(q=>q.svg&&q.svg.length>1048576).map(q=>q.name);if(pes.length){statusEl.textContent+=' Atenção: '+pes.length+' arquivo(s) ficaram pesados (mais de 1 MB) e podem travar o programa da máquina: '+pes.join(', ')+'. Para corte, prefira o estilo “Corte limpo” ou imagens mais simples.'}}
   function downloadSvg(it){
     const blob=new Blob([it.svg],{type:'image/svg+xml'});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);
